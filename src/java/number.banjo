@@ -1,0 +1,133 @@
+(
+  "
+   Wrap a java.lang.Number to support standard banjo arithmetic operations.
+
+   `n` is a java `integer`, `long`, `float`, `double`, `big decimal`, or `big integer`, and
+   `suffix` is a `java.lang.String`
+  "
+
+  is integer(n) = n.java number variant { integer = true }
+  is long(n) = n.java number variant { long = true }
+  is float(n) = n.java number variant { float = true }
+  is double(n) = n.java number variant { double = true }
+
+  usage examples = [
+    # isinteger(4i)
+    # isinteger(4i + 3i)
+    # isinteger(4i + 1)
+    # isinteger(5i - 3)
+
+    # islong(4)
+    # islong(5 + 2)
+
+    is float(5f)
+    is float(5f + 2f)
+    is float(5f + 2)
+    is float(5f + 3)
+    is float(4f - 3)
+
+    is double(6d)
+    is double(6d - 2d)
+    is double(6d - 2)
+    is double(6d - 2.0f)
+  ]
+
+  implementations = banjo.eval.util.JavaRuntimeSupport.{
+    byte = Bytes,
+    short = Shorts,
+    integer = Integers,
+    long = Longs,
+    float = Floats,
+    double = Doubles,
+    big integer = BigIntegers,
+    big decimal = BigDecimals
+  }
+
+) ⇒ number(n) -> {
+  x.java number = n
+
+  x.java number variant = (
+    java.if(n) instanceof (java.lang.Byte) then (.integer) else
+    java.if(n) instanceof (java.lang.Short) then (.integer) else
+    java.if(n) instanceof (java.lang.Integer) then (.integer) else
+    java.if(n) instanceof (java.lang.Long) then (.long) else
+    java.if(n) instanceof (java.lang.Float) then (.float) else
+    java.if(n) instanceof (java.lang.Double) then (.double) else
+    java.if(n) instanceof (java.math.BigInteger) then (.big integer) else
+    java.if(n) instanceof (java.math.BigDecimal) then (.big decimal) else
+    fail("Unexpected java number type " + java.string(n.getClass().getName()))
+  )
+
+  x.java operations = (
+    "
+    An operations dictionary appropriate for the type of this number.  When
+    invoked with a single parameter, selects the operations dictionary for
+    the number with the larger range / precision between this one and the one
+    provided.
+    "
+    impl = x.java number variant(implementations)
+  ) ⇒ ((y) ↦ y.java number variant(x.java number variant {
+      integer     = { byte = x, short = x, integer = x, long = y, float = y, double = y, big integer = y, big decimal = y }
+      long        = { byte = x, short = x, integer = x, long = x, float = y, double = y, big integer = y, big decimal = y }
+      float       = { byte = x, short = x, integer = x, long = x, float = x, double = y, big integer = y, big decimal = y }
+      double      = { byte = x, short = x, integer = x, long = x, float = x, double = x, big integer = y, big decimal = y }
+      big integer = { byte = x, short = x, integer = x, long = x, float = y, double = y, big integer = x, big decimal = y } # TODO big integer + float/double == ?
+      big decimal = { byte = x, short = x, integer = x, long = x, float = x, double = x, big integer = x, big decimal = x }
+  }).java operations) @ {
+    abs = impl.abs ; java.number
+    neg = impl.neg ; java.number
+
+    sum        = impl.sum ; java.number
+    difference = impl.difference ; java.number
+    product    = impl.product ; java.number
+    quotient   = impl.quotient ; java.number
+
+    eq = impl.eq ; java.boolean
+    gt = impl.gt ; java.boolean
+    ge = impl.ge ; java.boolean
+    lt = impl.lt ; java.boolean
+    le = impl.le ; java.boolean
+    ne = impl.ne ; java.boolean
+    cmp = impl.cmp
+    
+    label = x.label+".java operations"
+
+  }
+
+  x.is zero = (x == 0)
+  x.is negative = (x < 0)
+  x.is positive = (x > 0)
+  x.sign = data.sign.of number(x)
+
+  (x + y) = x.java operations(y).sum(x, y)
+  (x - y) = x.java operations(y).difference(x, y)
+  (x * y) = x.java operations(y).product(x, y)
+  (x / y) = x.java operations(y).quotient(x, y)
+  (x == y) = x.java operations(y).eq(x, y)
+  (x != y) = x.java operations(y).ne(x, y)
+  (x > y) = x.java operations(y).gt(x, y)
+  (x >= y) = x.java operations(y).ge(x, y)
+  (x < y) = x.java operations(y).lt(x, y)
+  (x <= y) = x.java operations(y).le(x, y)
+  (x <=> y) = x.java operations(y).cmp(x, y, data.order.ascending, data.order.equal, data.order.descending, data.order.undefined)
+  (|x|) = x.java operations.abs(x)
+  (-x) = x.java operations.neg(x)
+
+  conversions = {
+    java = {
+      lang = {
+        Long = n.longValue()
+        Integer = n.intValue()
+        Float = n.floatValue()
+        Double = n.doubleValue()
+        Short = n.shortValue()
+      }
+      math = {
+        BigInteger = java.if(n) instanceof (java.math.BigInteger) then (n) else (java.math.BigInteger(n.toString()))
+        BigDecimal = java.if(n) instanceof (java.math.BigDecimal) then (n) else (java.math.BigDecimal(n.toString()))
+      }
+    }
+  }
+
+  label = java.string(n.toString())
+}

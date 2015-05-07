@@ -1,0 +1,14 @@
+({Character} = java.lang) ⇒
+(s) ↦ (
+  java string extensions = {
+    conversions = { java  = { lang = { String = s } } }
+  }
+
+  code points(offset, length) =
+    if(s.length() <= offset || length == 0) then ([]) else ((
+      head = s.codePointAt(offset)
+      count = min(Character.charCount(head), length-offset)
+      tail = code points(offset + count, length - count)
+    ) ⇒ data.list.node(head, tail))
+
+) ⇒ data.string(code points(0, s.length)) @ java string extensions

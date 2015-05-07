@@ -1,0 +1,6 @@
+"Convert an instance of `fj.List` to a list." ⇒
+java list(list) ↦ 
+  if(list.isEmpty()) then (data.list.empty) else (
+    data.list.node(list.head(), java list(list.tail()))
+  )
+  
