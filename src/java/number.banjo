@@ -32,7 +32,7 @@
     is double(6d - 2.0f)
   ]
 
-  implementations = banjo.eval.util.JavaRuntimeSupport.{
+  implementations = java.rts.{
     byte = Bytes,
     short = Shorts,
     integer = Integers,
@@ -47,14 +47,14 @@
   x.java number = n
 
   x.java number variant = (
-    java.if(n) instanceof (java.lang.Byte) then (.integer) else
-    java.if(n) instanceof (java.lang.Short) then (.integer) else
-    java.if(n) instanceof (java.lang.Integer) then (.integer) else
-    java.if(n) instanceof (java.lang.Long) then (.long) else
-    java.if(n) instanceof (java.lang.Float) then (.float) else
-    java.if(n) instanceof (java.lang.Double) then (.double) else
-    java.if(n) instanceof (java.math.BigInteger) then (.big integer) else
-    java.if(n) instanceof (java.math.BigDecimal) then (.big decimal) else
+    if(n ∈ java.lang.Byte) then (.integer) else
+    if(n ∈ java.lang.Short) then (.integer) else
+    if(n ∈ java.lang.Integer) then (.integer) else
+    if(n ∈ java.lang.Long) then (.long) else
+    if(n ∈ java.lang.Float) then (.float) else
+    if(n ∈ java.lang.Double) then (.double) else
+    if(n ∈ java.math.BigInteger) then (.big integer) else
+    if(n ∈ java.math.BigDecimal) then (.big decimal) else
     fail("Unexpected java number type " + java.string(n.getClass().getName()))
   )
 
@@ -89,7 +89,7 @@
     le = impl.le ; java.boolean
     ne = impl.ne ; java.boolean
     cmp = impl.cmp
-    
+
     label = x.label+".java operations"
 
   }
@@ -123,8 +123,12 @@
         Short = n.shortValue()
       }
       math = {
-        BigInteger = java.if(n) instanceof (java.math.BigInteger) then (n) else (java.math.BigInteger(n.toString()))
-        BigDecimal = java.if(n) instanceof (java.math.BigDecimal) then (n) else (java.math.BigDecimal(n.toString()))
+        BigInteger = if(n ∈ java.math.BigInteger) then (n) else (java.math.BigInteger(n.toString()))
+        BigDecimal = (
+          if(n ∈ java.math.BigDecimal) then (n) else
+          if(n ∈ java.math.BigInteger) then (java.math.BigDecimal(n)) else 
+          java.math.BigDecimal(n.toString())
+        )
       }
     }
   }

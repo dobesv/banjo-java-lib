@@ -1,9 +1,15 @@
-({Character} = java.lang) ⇒
-(s) ↦ (
-  java string extensions = {
-    conversions = { java  = { lang = { String = s } } }
+(
+  {Character} = java.lang
+  operations = (
+    impl = java.rts.Strings
+    comparisons = functions.slot interceptor(\∘(java.boolean)) (impl)
+  ) ⇒ comparisons.{eq,gt,ge,le,lt} @ {
+    concat = impl.concat ; java.string
+    cmp = impl.cmp  
   }
-
+    
+  
+) ⇒ (s) ↦ (
   code points(offset, length) =
     if(s.length() <= offset || length == 0) then ([]) else ((
       head = s.codePointAt(offset)
@@ -11,4 +17,15 @@
       tail = code points(offset + count, length - count)
     ) ⇒ data.list.node(head, tail))
 
-) ⇒ data.string(code points(0, s.length)) @ java string extensions
+) ⇒ data.string(code points(0, s.length)) @ {
+  java string = s
+  (s1 == s2) = s1.java string.equals(s2.java string)
+  (s1 < s2) = operations.lt(s1, s2)
+  (s1 ≤ s2) = operations.le(s1.java string, s2.java string)
+  (s1 > s2) = operations.gt(s1.java string, s2.java string)
+  (s1 ≥ s2) = operations.ge(s1.java string, s2.java string)
+  (s1 + s2) = operations.concat(s1.java string, s2.java string)
+  (s1 <=> s2) = operations.cmp(s1, s2, data.order.ascending, data.order.equal, data.order.descending, data.order.undefined)
+   
+  conversions = { java  = { lang = { String = s } } }
+}

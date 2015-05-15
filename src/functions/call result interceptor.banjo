@@ -1,0 +1,1 @@
+(f) -> (obj) -> java.rts.callResultInterceptor(f, obj)
