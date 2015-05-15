@@ -89,6 +89,7 @@
     le = impl.le ; java.boolean
     ne = impl.ne ; java.boolean
     cmp = impl.cmp
+    sign = impl.checkSign(n, data.sign.negative, data.sign.zero, data.sign.positive)
 
     label = x.label+".java operations"
 
