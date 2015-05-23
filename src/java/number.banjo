@@ -6,10 +6,12 @@
    `suffix` is a `java.lang.String`
   "
 
-  is integer(n) = n.java number variant { integer = true }
-  is long(n) = n.java number variant { long = true }
-  is float(n) = n.java number variant { float = true }
-  is double(n) = n.java number variant { double = true }
+  is integer(n) = n.java number ∈ java.lang.Integer
+  is long(n) = n.java number ∈ java.lang.Long
+  is float(n) = n.java number ∈ java.lang.Float
+  is double(n) = n.java number ∈ java.lang.Double
+  is big integer(n) = n.java number ∈ java.math.BigInteger
+  is big decimal(n) = n.java number ∈ java.math.BigDecimal
 
   usage examples = [
     # isinteger(4i)
@@ -92,7 +94,9 @@
     sign = impl.checkSign(n, data.sign.negative, data.sign.zero, data.sign.positive)
 
     label = x.label+".java operations"
-
+    
+    big integer = impl.toBigInteger
+    big decimal = impl.toBigDecimal
   }
 
   x.is zero = (x == 0)
@@ -114,7 +118,7 @@
   (|x|) = x.java operations.abs(x)
   (-x) = x.java operations.neg(x)
 
-  conversions = {
+  x.conversions = {
     java = {
       lang = {
         Long = n.longValue()
@@ -124,12 +128,8 @@
         Short = n.shortValue()
       }
       math = {
-        BigInteger = if(n ∈ java.math.BigInteger) then (n) else (java.math.BigInteger(n.toString()))
-        BigDecimal = (
-          if(n ∈ java.math.BigDecimal) then (n) else
-          if(n ∈ java.math.BigInteger) then (java.math.BigDecimal(n)) else 
-          java.math.BigDecimal(n.toString())
-        )
+        BigInteger = x.java operations.big integer(n)
+        BigDecimal = x.java operations.big decimal(n)
       }
     }
   }
