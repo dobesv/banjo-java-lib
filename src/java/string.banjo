@@ -2,8 +2,8 @@
   {Character} = java.lang
   operations = (
     impl = java.rts.Strings
-    comparisons = functions.slot interceptor(\∘(java.boolean)) (impl)
-  ) ⇒ comparisons.{eq,gt,ge,le,lt} @ {
+    comparisons = functions.slot interceptor(slot -> java.boolean(slot(impl))).{eq,gt,ge,le,lt}
+  ) ⇒ comparisons @ {
     concat = impl.concat ; java.string
     cmp = impl.cmp  
   }
