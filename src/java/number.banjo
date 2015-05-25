@@ -93,8 +93,8 @@
     cmp = impl.cmp
     sign = impl.checkSign(n, data.sign.negative, data.sign.zero, data.sign.positive)
 
-    label = x.label+".java operations"
-    
+    label = java.string(impl.toString())
+
     big integer = impl.toBigInteger
     big decimal = impl.toBigDecimal
   }
@@ -117,6 +117,7 @@
   (x <=> y) = x.java operations(y).cmp(x, y, data.order.ascending, data.order.equal, data.order.descending, data.order.undefined)
   (|x|) = x.java operations.abs(x)
   (-x) = x.java operations.neg(x)
+  (+x) = x
 
   x.conversions = {
     java = {
