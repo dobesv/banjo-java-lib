@@ -1,0 +1,6 @@
+(code points) ↦ data:string(code points) @ {
+  java string = code points.into {
+    empty = java runtime.string builder
+    node(code point, builder) = builder.appendCodePoint(code point)
+  }.reverse.toString
+}

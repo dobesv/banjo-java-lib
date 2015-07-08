@@ -1,0 +1,8 @@
+data:list @ ((variant) ↦ (data:list(variant) @ {
+  a.java list = a.into {
+    empty = java runtime.empty list
+    node(elt, tail) = java runtime.cons(elt, tail)
+  }
+  
+  a.conversions = { java = { lang = { Runnable = java runtime.runnableList(a.java list) } } }
+}))

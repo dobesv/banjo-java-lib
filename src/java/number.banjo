@@ -34,16 +34,7 @@
     is double(6d - 2.0f)
   ]
 
-  implementations = java.rts.{
-    byte = Bytes,
-    short = Shorts,
-    integer = Integers,
-    long = Longs,
-    float = Floats,
-    double = Doubles,
-    big integer = BigIntegers,
-    big decimal = BigDecimals
-  }
+  implementations = java.rts
 
 ) ⇒ number(n) -> {
   x.java number = n
@@ -57,7 +48,7 @@
     if(n ∈ java.lang.Double) then (.double) else
     if(n ∈ java.math.BigInteger) then (.big integer) else
     if(n ∈ java.math.BigDecimal) then (.big decimal) else
-    fail("Unexpected java number type " + java.string(n.getClass().getName()))
+    fail("Unexpected java number type " + java.string(n.getClass.getName))
   )
 
   x.java operations = (
@@ -68,12 +59,13 @@
     provided.
     "
     impl = x.java number variant(implementations)
+    z = x.java operations.big decimal(x) # big integer + float/double => BigDecimal
   ) ⇒ ((y) ↦ y.java number variant(x.java number variant {
       integer     = { byte = x, short = x, integer = x, long = y, float = y, double = y, big integer = y, big decimal = y }
       long        = { byte = x, short = x, integer = x, long = x, float = y, double = y, big integer = y, big decimal = y }
-      float       = { byte = x, short = x, integer = x, long = x, float = x, double = y, big integer = y, big decimal = y }
-      double      = { byte = x, short = x, integer = x, long = x, float = x, double = x, big integer = y, big decimal = y }
-      big integer = { byte = x, short = x, integer = x, long = x, float = y, double = y, big integer = x, big decimal = y } # TODO big integer + float/double == ?
+      float       = { byte = x, short = x, integer = x, long = x, float = x, double = y, big integer = z, big decimal = y }
+      double      = { byte = x, short = x, integer = x, long = x, float = x, double = x, big integer = z, big decimal = y }
+      big integer = { byte = x, short = x, integer = x, long = x, float = z, double = z, big integer = x, big decimal = y } 
       big decimal = { byte = x, short = x, integer = x, long = x, float = x, double = x, big integer = x, big decimal = x }
   }).java operations) @ {
     abs = impl.abs ; java.number
@@ -91,12 +83,12 @@
     le = impl.le ; java.boolean
     ne = impl.ne ; java.boolean
     cmp = impl.cmp
-    sign = impl.checkSign(n, data.sign.negative, data.sign.zero, data.sign.positive)
+    sign = impl.sign(n, data.sign.negative, data.sign.zero, data.sign.positive)
 
-    label = java.string(impl.toString())
+    label = java.string(impl.toString)
 
-    big integer = impl.toBigInteger
-    big decimal = impl.toBigDecimal
+    big integer = impl.to big integer
+    big decimal = impl.to big decimal
   }
 
   x.is zero = (x == 0)
@@ -122,11 +114,11 @@
   x.conversions = {
     java = {
       lang = {
-        Long = n.longValue()
-        Integer = n.intValue()
-        Float = n.floatValue()
-        Double = n.doubleValue()
-        Short = n.shortValue()
+        Long = n.longValue
+        Integer = n.intValue
+        Float = n.floatValue
+        Double = n.doubleValue
+        Short = n.shortValue
       }
       math = {
         BigInteger = x.java operations.big integer(n)
@@ -135,5 +127,5 @@
     }
   }
 
-  label = java.string(n.toString())
+  label = java.string(n.toString)
 }

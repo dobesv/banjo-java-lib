@@ -1,30 +1,34 @@
 (
   {Character} = java.lang
   operations = (
-    impl = java.rts.Strings
+    impl = java.rts.string
     comparisons = functions.slot interceptor(slot -> java.boolean(slot(impl))).{eq,gt,ge,le,lt}
   ) ⇒ comparisons @ {
     concat = impl.concat ; java.string
     cmp = impl.cmp  
   }
-    
   
+  # Used for string concatenation to allow auto-conversion of non-strings into string using the "label" slot.  Strings
+  # won't use the label slot because the string label is quoted whereas for string concatenation we don't want to quote
+  # the string.
+  coerce to java string(x) = ({non string.java string = non string.label.java string} @ x).java string
 ) ⇒ (s) ↦ (
   code points(offset, length) =
-    if(s.length() <= offset || length == 0) then ([]) else ((
+    if(s.length <= offset || length <= 0) then ([]) else ((
       head = s.codePointAt(offset)
-      count = min(Character.charCount(head), length-offset)
+      count = Character.charCount(head)
       tail = code points(offset + count, length - count)
     ) ⇒ data.list.node(head, tail))
 
 ) ⇒ data.string(code points(0, s.length)) @ {
   java string = s
-  (s1 == s2) = s1.java string.equals(s2.java string)
+  (s1 == s2) = operations.eq(s1, s2)
+  (s1 != s2) = operations.ne(s1, s2)
   (s1 < s2) = operations.lt(s1, s2)
-  (s1 ≤ s2) = operations.le(s1.java string, s2.java string)
-  (s1 > s2) = operations.gt(s1.java string, s2.java string)
-  (s1 ≥ s2) = operations.ge(s1.java string, s2.java string)
-  (s1 + s2) = operations.concat(s1.java string, s2.java string)
+  (s1 ≤ s2) = operations.le(s1, s2)
+  (s1 > s2) = operations.gt(s1, s2)
+  (s1 ≥ s2) = operations.ge(s1, s2)
+  (s1 + s2) = operations.concat(coerce to java string(s1), coerce to java string(s2).java string)
   (s1 <=> s2) = operations.cmp(s1, s2, data.order.ascending, data.order.equal, data.order.descending, data.order.undefined)
    
   conversions = { java  = { lang = { String = s } } }
