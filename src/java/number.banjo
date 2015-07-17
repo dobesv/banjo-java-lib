@@ -96,10 +96,15 @@
   x.is positive = (x > 0)
   x.sign = data.sign.of number(x)
 
+  x.is even = (x & 1) == 0
+  x.is odd = (x & 1) == 1
+  
   (x + y) = x.java operations(y).sum(x, y)
   (x - y) = x.java operations(y).difference(x, y)
   (x * y) = x.java operations(y).product(x, y)
   (x / y) = x.java operations(y).quotient(x, y)
+  (x & y) = x.java operations(y).bitwise and(x, y)
+  (x | y) = x.java operations(y).bitwise or(x, y)
   (x == y) = x.java operations(y).eq(x, y)
   (x != y) = x.java operations(y).ne(x, y)
   (x > y) = x.java operations(y).gt(x, y)

@@ -1,1 +1,0 @@
-(f) -> (obj) -> java.rts.slotInterceptor(f, obj)

@@ -1,1 +1,0 @@
-(f) -> (obj) -> java.rts.argInterceptor(f, obj)
