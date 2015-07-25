@@ -75,7 +75,9 @@
     difference = impl.difference ; java.number
     product    = impl.product ; java.number
     quotient   = impl.quotient ; java.number
-
+    bitwise and = impl.bitwise and ; java.number
+    bitwise or = impl.bitwise or ; java.number
+    
     eq = impl.eq ; java.boolean
     gt = impl.gt ; java.boolean
     ge = impl.ge ; java.boolean

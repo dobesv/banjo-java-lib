@@ -2,7 +2,7 @@
   {Character} = java.lang
   operations = (
     impl = java.rts.string
-    comparisons = functions.slot mapper(java.boolean).{eq,gt,ge,le,lt}
+    comparisons = meta.slot mapper(java.boolean).{eq,gt,ge,le,lt}
   ) ⇒ comparisons @ {
     concat = impl.concat ; java.string
     cmp = impl.cmp  
