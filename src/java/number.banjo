@@ -100,6 +100,7 @@
 
   x.is even = (x & 1) == 0
   x.is odd = (x & 1) == 1
+  x.is not a number = x.java number.doubleValue.isNaN
   
   (x + y) = x.java operations(y).sum(x, y)
   (x - y) = x.java operations(y).difference(x, y)
