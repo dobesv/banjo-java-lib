@@ -1,0 +1,7 @@
+(f) ↦ f @ {
+    clock = java runtime.default clock
+    resource = java runtime.default resource
+    fps = 10
+    pending event = .pending event
+    event occurrence(e, chain) = .event occurrence(e, chain)
+}
