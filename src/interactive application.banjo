@@ -1,7 +1,8 @@
-(f) ↦ f @ {
-    clock = java runtime.default clock
-    resource = java runtime.default resource
-    fps = 10
-    pending event = .pending event
-    event occurrence(e, chain) = .event occurrence(e, chain)
-}
+(f) ↦ 
+  (interactive application.default configuration @ 
+    f @
+      ff(app) ↦ 
+        interactive application.default output @ 
+          ^ff(app @ interactive application.input extensions) 
+  )
+
