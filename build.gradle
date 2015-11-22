@@ -1,0 +1,73 @@
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: "maven"
+apply plugin: "osgi"
+
+version = "0.1"
+group = "banjo"
+sourceCompatibility = "1.8"
+
+ext {
+	projectTitle = "Banjo Language Java Runtime Library"
+	projectName = "banjo-java-lib"
+	groupId = "banjo"
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven {
+		url "https://repo.eclipse.org/content/repositories/eclipse-releases"
+	}
+}
+
+sourceSets {
+	main {
+	    java {
+	        srcDirs = []
+	    }
+		resources {
+		    srcDirs = ['src']
+		}
+	}
+	test {
+		resources {
+			srcDirs = ['test']
+		}
+	}
+}
+
+jar {
+	version project.version
+	manifest {
+		name = 'Banjo Language Java Runtime Library'
+		instruction 'Bundle-ActivationPolicy', 'lazy'
+		instruction 'Bundle-Vendor', 'org.banjo-lang'
+	}
+}
+
+eclipse {
+  project {
+	natures 'org.eclipse.pde.PluginNature'
+	buildCommand 'org.eclipse.pde.ManifestBuilder'
+	buildCommand 'org.eclipse.pde.SchemaBuilder'
+  }
+}
+
+
+// Workaround https://issues.gradle.org/browse/GRADLE-1288
+task mkClassesOutput << {
+    file("${projectDir}/build/classes/main").mkdirs()
+}
+jar.dependsOn(mkClassesOutput)
+
+// Output MANIFEST.MF statically so eclipse can see it for plugin development
+task eclipsePluginManifest(dependsOn: jar) << {
+  file("META-INF").mkdirs()
+  jar.manifest.writeTo(file("META-INF/MANIFEST.MF"))
+}
+
+eclipseProject.dependsOn eclipsePluginManifest
+
