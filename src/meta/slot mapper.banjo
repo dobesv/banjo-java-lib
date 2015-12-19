@@ -1,1 +1,1 @@
-(f) -> (source) -> java runtime.slot mapper(f, source)
+(f) -> (source) -> language core runtime.slot mapper(f, source)

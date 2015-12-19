@@ -1,8 +1,8 @@
 (f) ↦ 
   (interactive application.default configuration @ 
     f @
-      ff(app) ↦ 
+      ff(input) ↦ 
         interactive application.default output @ 
-          ^ff(app @ interactive application.input extensions) 
+          ^ff(input @ interactive application.input extensions) 
   )
 

@@ -1,1 +1,1 @@
-(f) -> (obj) -> java runtime.arg mapper(f, obj)
+(f) -> (obj) -> language core runtime.arg mapper(f, obj)

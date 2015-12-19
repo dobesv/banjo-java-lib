@@ -1,1 +1,1 @@
-(base) ↦ (ext) ↦ java runtime.extension(base, ext)
+(base) ↦ (ext) ↦ language core runtime.extension(base, ext)

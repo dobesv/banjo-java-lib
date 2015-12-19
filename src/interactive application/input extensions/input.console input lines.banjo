@@ -1,0 +1,6 @@
+# Translate the java console line feed into a list of strings
+data.event stream.of(
+  input:java console input lines,
+  .line,
+  .next event
+) 

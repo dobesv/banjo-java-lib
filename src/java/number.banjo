@@ -1,5 +1,5 @@
 (
-  "
+  doc = "
    Wrap a java.lang.Number to support standard banjo arithmetic operations.
 
    `n` is a java `integer`, `long`, `float`, `double`, `big decimal`, or `big integer`, and
@@ -52,11 +52,11 @@
   )
 
   x.java operations = (
-    "
-    An operations dictionary appropriate for the type of this number.  When
-    invoked with a single parameter, selects the operations dictionary for
-    the number with the larger range / precision between this one and the one
-    provided.
+    doc = "
+      An operations dictionary appropriate for the type of this number.  When
+      invoked with a single parameter, selects the operations dictionary for
+      the number with the larger range / precision between this one and the one
+      provided.
     "
     impl = x.java number variant(implementations)
     z = x.java operations.big decimal(x) # big integer + float/double => BigDecimal

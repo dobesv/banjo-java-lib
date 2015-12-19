@@ -1,3 +1,3 @@
 data:false @ {
-  conversions = { java = { lang = { Boolean = java runtime.FALSE } } }
+  conversions = { java = { lang = { Boolean = language core runtime.FALSE } } }
 }
